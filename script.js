@@ -60,13 +60,31 @@ function renderHtml(data, className) {
 
 //
 
-const getCountry = function (country) {
-  fetch(`https://restcountries.com/v2/name/${country}`)
-    .then(
-      response => response.json(),
-      error => alert(error)
-    )
+const errorXabar = function (response, msg) {
+  if (!response.ok) {
+    throw new Error(`${msg} ${response.status} ${response.statusText}`);
+  }
+};
+const getJson = function (url, msg) {
+  return fetch(url).then(response => {
+    errorXabar(response, msg);
+    return response.json();
+  });
+};
 
+const getCountry = function (country) {
+  getJson(`https://restcountries.com/v2/name/${country}`, `Davlatni topolmadim`)
+    // fetch(`https://restcountries.com/v2/name/${country}`)
+    //   .then(
+    //     response => {
+    //       console.log(response);
+    //       // if (!response.ok) {
+    //       //   throw new Error(`Davlatni topolmadim`);
+    //       // }
+    //       return response.json();
+    //     }
+    //     // error => alert(error)
+    //   )
     .then(function (res) {
       console.log(res);
       let [data3] = res;
@@ -83,10 +101,14 @@ const getCountry = function (country) {
       //     renderHtml(res, 'neighbour');
       //   });
 
-      return fetch(`https://restcountries.com/v2/alpha/${border}`);
-    })
-    .then(function (response) {
-      return response.json();
+      return getJson(
+        `https://restcountries.com/v2/alpha/${border}`,
+        `qo'shni davlatni topolmadim`
+      );
+      //   return fetch(`https://restcountries.com/v2/alpha/${border}`);
+      // })
+      // .then(function (response) {
+      //   return response.json();
     })
     .then(function (res) {
       renderHtml(res, 'neighbour');
@@ -95,10 +117,26 @@ const getCountry = function (country) {
       alert(error);
     })
     .finally(e => {
-      document.querySelector('.center').style.display = 'none';
-      alert('stop loading');
+      // document.querySelector('.center').style.display = 'none';
+      // alert('stop loading');
     });
 };
+
 // getCountry('usa');
 getCountry('uzb');
 // getCountry('afg');
+
+setTimeout(e => {
+  x++;
+  console.log(x);
+}, 0);
+setTimeout(e => {
+  x++;
+  console.log(x);
+}, 0);
+setTimeout(e => {
+  x++;
+  console.log(x);
+}, 0);
+let x = 3;
+console.log(x);
